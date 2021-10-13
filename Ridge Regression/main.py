@@ -3,6 +3,7 @@
 import numpy as np
 import pandas as pd
 from  sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 
 class RidgeRegression():
@@ -62,7 +63,7 @@ def main():
     X = df.iloc[:, :-1].values
     Y = df.iloc[:, -1].values
 
-    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 1/3, random_state = 0)
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 5/6, random_state = 0)
 
     Y_mean = np.mean(Y_test)
     
@@ -71,20 +72,28 @@ def main():
     model = RidgeRegression( iterations = 1000, learning_rate = 0.01, l2_penalty = 1)
     model.fit(X_train, Y_train)
 
+    ols_model = LinearRegression()
+    ols_model.fit(X_train, Y_train)
+
+    ols_Y_pred = ols_model.predict(X_test)
+
     Y_pred = model.predict(X_test)
 
     se = np.sum((Y_test - Y_pred) ** 2)
+    ols_se = np.sum((Y_test - ols_Y_pred) ** 2)
 
     r2 = 1 - se / y_variance
+    ols_r2 = 1 - ols_se / y_variance
 
     plt.scatter(X_test, Y_test, color='blue')
     plt.plot(X_test, Y_pred, color='orange')
+    plt.plot(X_test, ols_Y_pred, color='green')
     plt.title('Salary vs Experience')
     plt.xlabel('Years of Experience')
     plt.ylabel('Salary vs Experience')
     plt.show()
 
-    print(r2)
+    print(r2, ols_r2)
     
 if __name__ == '__main__':
         main()
