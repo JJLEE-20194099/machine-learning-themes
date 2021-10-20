@@ -2,6 +2,7 @@ from sklearn.datasets import load_iris
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import RandomizedSearchCV
 import matplotlib.pyplot as plt
 
 iris = load_iris()
@@ -41,16 +42,25 @@ knn = KNeighborsClassifier()
 k_range = list(range(1, 31))
 # print(k_range)
 
-param_grid = dict(n_neighbors = k_range)
+# param_grid = dict(n_neighbors = k_range)
 # print(param_grid)
 
-grid = GridSearchCV(knn, param_grid, cv = 10, scoring='accuracy')
-grid.fit(X, y)
+# grid = GridSearchCV(knn, param_grid, cv = 10, scoring='accuracy')
+# grid.fit(X, y)
 
 # print(grid.best_score_)
 # print(grid.best_params_)
 # print(grid.best_estimator_)
 
+weight_options = ['uniform', 'distance']
+
+param_grid = dict(n_neighbors = k_range, weights = weight_options)
+# print(param_grid)
+
+rand = RandomizedSearchCV(knn, param_grid, cv = 10, scoring = 'accuracy', n_iter = 10)
+
+rand.fit(X, y)
+print(rand.best_params_)
 
 
 
