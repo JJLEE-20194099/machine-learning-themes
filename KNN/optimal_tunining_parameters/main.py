@@ -52,15 +52,23 @@ k_range = list(range(1, 31))
 # print(grid.best_params_)
 # print(grid.best_estimator_)
 
-weight_options = ['uniform', 'distance']
+# weight_options = ['uniform', 'distance']
 
-param_grid = dict(n_neighbors = k_range, weights = weight_options)
+# param_grid = dict(n_neighbors = k_range, weights = weight_options)
 # print(param_grid)
 
-rand = RandomizedSearchCV(knn, param_grid, cv = 10, scoring = 'accuracy', n_iter = 10)
+# rand = RandomizedSearchCV(knn, param_grid, cv = 10, scoring = 'accuracy', n_iter = 10)
 
-rand.fit(X, y)
-print(rand.best_params_)
+# rand.fit(X, y)
+# print(rand.best_params_)
+
+knn = KNeighborsClassifier(n_neighbors = 18)
+knn.fit(X, y)
+
+print(knn.score(X, y))
+scores = cross_val_score(knn, X, y, cv = 10, scoring = "accuracy")
+print(scores.mean())
 
 
+# cross validation -> reliable and reduce variance
 
